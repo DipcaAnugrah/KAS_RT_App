@@ -15,6 +15,9 @@
         android:theme="@style/Theme.KAS_RT"
         tools:targetApi="31">
         <activity
+            android:name=".LaporanAdapter"
+            android:exported="false" />
+        <activity
             android:name=".LaporanActivity"
             android:exported="false" />
         <activity

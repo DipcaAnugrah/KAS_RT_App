@@ -1,7 +1,14 @@
 package id.co.kas_rt
+
+import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import id.co.kas_rt.model.DataItem
+import id.co.kas_rt.model.ResponseUser
 import id.co.kas_rt.network.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,77 +16,41 @@ import retrofit2.Response
 
 class LaporanActivity : AppCompatActivity() {
 
-    private lateinit var jumlahIuranBulananTextView: TextView
-    private lateinit var totalIuranTextView: TextView
-    private lateinit var pengeluaranTextView: TextView
-    private lateinit var pemanfaatanTextView: TextView
+    private lateinit var adapter: LaporanAdapter
+    private lateinit var rv_laporan: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_laporan)
 
-        jumlahIuranBulananTextView = findViewById(R.id.jumlahIuranBulananTextView)
-        totalIuranTextView = findViewById(R.id.totalIuranTextView)
-        pengeluaranTextView = findViewById(R.id.pengeluaranTextView)
-        pemanfaatanTextView = findViewById(R.id.pemanfaatanTextView)
+        rv_laporan = findViewById(R.id.rv_laporan)
+        adapter = LaporanAdapter(mutableListOf())
 
-        // Panggil fungsi untuk mengambil data dari API
-        fetchDataFromApi()
+        rv_laporan.layoutManager = LinearLayoutManager(this)
+        rv_laporan.adapter = adapter
+
+        getData()
     }
 
-    private fun fetchDataFromApi() {
+    private fun getData() {
         val apiService = ApiConfig.getApiService()
+        val client = apiService.getData()
 
-        // Lakukan panggilan ke API untuk masing-masing data
-        apiService.getJumlahIuranBulanan().enqueue(object : Callback<Int> {
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+        client.enqueue(object : Callback<ResponseUser> {
+            override fun onResponse(call: Call<ResponseUser>, response: Response<ResponseUser>) {
                 if (response.isSuccessful) {
-                    val jumlahIuranBulanan = response.body() ?: 0
-                    jumlahIuranBulananTextView.text = "Jumlah Iuran Bulanan: $jumlahIuranBulanan"
+                    val dataArray = response.body()?.data
+                    if (dataArray != null) {
+                        adapter.setData(dataArray)
+                    }
+                } else {
+                    Toast.makeText(this@LaporanActivity, "Failed to retrieve data", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                // Handle error ketika gagal mengambil data dari API
-            }
-        })
-
-        apiService.getTotalIuran().enqueue(object : Callback<Int> {
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                if (response.isSuccessful) {
-                    val totalIuran = response.body() ?: 0
-                    totalIuranTextView.text = "Total Iuran: $totalIuran"
-                }
-            }
-
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                // Handle error ketika gagal mengambil data dari API
-            }
-        })
-
-        apiService.getPengeluaranIuran().enqueue(object : Callback<Int> {
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                if (response.isSuccessful) {
-                    val pengeluaran = response.body() ?: 0
-                    pengeluaranTextView.text = "Pengeluaran: $pengeluaran"
-                }
-            }
-
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                // Handle error ketika gagal mengambil data dari API
-            }
-        })
-
-        apiService.getPemanfaatanIuran().enqueue(object : Callback<Int> {
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                if (response.isSuccessful) {
-                    val pemanfaatan = response.body() ?: 0
-                    pemanfaatanTextView.text = "Pemanfaatan: $pemanfaatan"
-                }
-            }
-
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                // Handle error ketika gagal mengambil data dari API
+            override fun onFailure(call: Call<ResponseUser>, t: Throwable) {
+                Toast.makeText(this@LaporanActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                t.printStackTrace()
             }
         })
     }

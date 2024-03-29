@@ -1,62 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".LaporanActivity">
 
-        <!-- Judul -->
+    <!-- TextView untuk judul -->
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Laporan KAS RT"
-        android:textSize="20sp"
+        android:text="LAPORAN KAS RT"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         android:gravity="center"
+        android:padding="16dp"
         android:background="#63AEF8"
-        android:padding="16dp"/>
-    <TextView
-        android:id="@+id/jumlahIuranBulananTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1. Jumlah Iuran Bulanan: "
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="16dp"/>
-    <TextView
-        android:id="@+id/totalIuranTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2. Total Iuran: "
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="16dp"/>
-    <TextView
-        android:id="@+id/pengeluaranTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3. Pengeluraan: "
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="16dp"/>
-    <TextView
-        android:id="@+id/pemanfaatanTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4. Pemanfaatan: "
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="16dp"/>
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- RecyclerView untuk menampilkan daftar -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_laporan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/textView1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:background="#F3FFFFFF"
+        tools:listitem="@layout/item_laporan" />
 
-
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

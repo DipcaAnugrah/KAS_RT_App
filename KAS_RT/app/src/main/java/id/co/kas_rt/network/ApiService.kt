@@ -9,6 +9,8 @@ import retrofit2.http.GET
 interface ApiService {
     @GET(".")
     fun getUsers(): Call<ResponseUser>
+    @GET(".")
+    fun getData(): Call<ResponseUser>
     @GET("jumlah_iuran_bulanan")
     fun getJumlahIuranBulanan(): Call<Int>
 
