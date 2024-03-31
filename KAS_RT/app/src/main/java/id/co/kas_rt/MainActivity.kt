@@ -54,9 +54,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    fun openActivityInformation(view: View) {
-        val intent = Intent(this, ActivityInformation::class.java)
-        startActivity(intent)
-    }
+
 
 }
